@@ -30,6 +30,7 @@ function LevelCard({ level }) {
 }
 
 function CategoryOverview() {
+  const navigate = useNavigate()
   const catStats = useCategoryStats()
 
   return (
@@ -38,17 +39,27 @@ function CategoryOverview() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {CATEGORIES.map((cat) => {
           const stats = catStats[cat.id] ?? { total: 0, done: 0, pct: 0 }
+          const started = stats.done > 0
           return (
-            <div key={cat.id} className="card p-3">
+            <button
+              key={cat.id}
+              onClick={() => navigate(`/category/${cat.id}`)}
+              className="card p-3 text-left hover:border-indigo-500 hover:shadow-md transition-all duration-200"
+            >
               <div className="flex items-center gap-1.5 mb-2">
-                <span className="text-base">{cat.icon}</span>
+                <span
+                  className="text-base w-7 h-7 flex items-center justify-center rounded-lg transition-colors duration-200"
+                  style={started ? { background: '#6366F120' } : undefined}
+                >
+                  {cat.icon}
+                </span>
                 <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">{cat.name}</span>
               </div>
-              <ProgressBar pct={stats.pct} color="#6366F1" height="5px" />
+              <ProgressBar pct={stats.pct} color={started ? '#6366F1' : '#94A3B8'} height="5px" />
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 {stats.done}/{stats.total} · {stats.pct}%
               </p>
-            </div>
+            </button>
           )
         })}
       </div>

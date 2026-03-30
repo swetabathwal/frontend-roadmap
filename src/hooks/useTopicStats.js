@@ -31,7 +31,7 @@ export function useGlobalStats() {
       cats.forEach((cat) =>
         cat.topics.forEach((t) => {
           total++
-          if (state.checked[`${id}::${cat.cat}::${t.t}`]) done++
+          if (state.checked[`${id}::${cat.cat}::${t.slug}`]) done++
         })
       )
     })
@@ -50,7 +50,7 @@ export function useCategoryStats() {
         if (!map[cat.cat]) map[cat.cat] = { total: 0, done: 0 }
         cat.topics.forEach((t) => {
           map[cat.cat].total++
-          if (state.checked[`${id}::${cat.cat}::${t.t}`]) map[cat.cat].done++
+          if (state.checked[`${id}::${cat.cat}::${t.slug}`]) map[cat.cat].done++
         })
       })
     })

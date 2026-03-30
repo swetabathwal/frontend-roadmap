@@ -12,6 +12,7 @@ import { StatsView } from './pages/StatsView'
 import { LoginPage } from './pages/LoginPage'
 import { SignupPage } from './pages/SignupPage'
 import { PublicProfileView } from './pages/PublicProfileView'
+import { CategoryView } from './pages/CategoryView'
 
 function AuthenticatedApp() {
   const { ready } = useApp()
@@ -33,7 +34,8 @@ function AuthenticatedApp() {
       <main className="max-w-screen-xl mx-auto px-4 py-6 pb-20">
         <Routes>
           <Route path="/"                  element={<Dashboard />} />
-          <Route path="/level/:levelId"    element={<LevelView />} />
+          <Route path="/level/:levelId"      element={<LevelView />} />
+          <Route path="/category/:categoryId" element={<CategoryView />} />
           <Route path="/bookmarks"         element={<BookmarksView />} />
           <Route path="/planner"           element={<PlannerView />} />
           <Route path="/stats"             element={<StatsView />} />

@@ -11,7 +11,7 @@ export function CategorySection({ cat, levelId }) {
   const [collapsed, setCollapsed] = useState(false)
   const catInfo = CATEGORIES.find((c) => c.id === cat.cat) ?? { name: cat.cat, icon: '📁' }
 
-  const done = cat.topics.filter((t) => state.checked[`${levelId}::${cat.cat}::${t.t}`]).length
+  const done = cat.topics.filter((t) => state.checked[`${levelId}::${cat.cat}::${t.slug}`]).length
 
   return (
     <section className="mb-4" aria-labelledby={`cat-${cat.cat}`}>
