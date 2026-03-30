@@ -1,0 +1,102 @@
+/**
+ * Senior (3–6 yr) topic data.
+ * IMPORTANT: `slug` is the stable primary key — never change it once shipped.
+ */
+export const SENIOR_TOPICS = [
+  { cat: 'html-css', topics: [
+    { slug: 'css-houdini-and-paint-worklets', t: 'CSS Houdini & Paint Worklets',   d: 'CSS custom properties, paint API, layout API', r: 'https://developer.mozilla.org/en-US/docs/Web/API/Houdini_API' },
+    { slug: 'advanced-theming-systems',       t: 'Advanced Theming Systems',        d: 'design tokens, multi-brand theming, runtime theme switching', r: '' },
+    { slug: 'css-performance-critical-path',  t: 'CSS Performance & Critical Path', d: 'critical CSS extraction, render-blocking, containment', r: '' },
+    { slug: 'web-components-and-shadow-dom',  t: 'Web Components & Shadow DOM',     d: 'custom elements, shadow DOM, slots, adoptedStyleSheets', r: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_components' },
+  ]},
+  { cat: 'javascript', topics: [
+    { slug: 'v8-engine-internals',             t: 'V8 Engine Internals',              d: 'JIT compilation, hidden classes, inline caching, garbage collection', r: 'https://v8.dev/blog' },
+    { slug: 'memory-management-deep-dive',     t: 'Memory Management Deep Dive',      d: 'heap vs stack, GC algorithms, memory profiling, leak patterns', r: '' },
+    { slug: 'concurrency-patterns',            t: 'Concurrency Patterns',             d: 'SharedArrayBuffer, Atomics, structured concurrency, async iterators', r: '' },
+    { slug: 'metaprogramming-and-ast',         t: 'Metaprogramming & AST Manipulation',d: 'Babel plugins, code generation, source maps, codemods', r: '' },
+    { slug: 'security-xss-csrf-csp-cors',      t: 'Security — XSS, CSRF, CSP, CORS', d: 'attack vectors, prevention, Content Security Policy, DOMPurify', r: 'https://owasp.org/www-project-top-ten/' },
+  ]},
+  { cat: 'typescript', topics: [
+    { slug: 'advanced-type-gymnastics',             t: 'Advanced Type Gymnastics',              d: 'recursive types, variadic tuples, type-level programming', r: 'https://github.com/type-challenges/type-challenges' },
+    { slug: 'type-safe-api-layers',                 t: 'Type-safe API Layers',                  d: 'zod, io-ts, runtime validation, end-to-end type safety', r: 'https://zod.dev/' },
+    { slug: 'custom-compiler-plugins-transformers', t: 'Custom Compiler Plugins & Transformers', d: 'TS compiler API, custom transformers, language service plugins', r: '' },
+    { slug: 'performance-tuning-ts-compilation',    t: 'Performance Tuning TS Compilation',     d: 'project references, incremental builds, skipLibCheck trade-offs', r: '' },
+  ]},
+  { cat: 'framework', topics: [
+    { slug: 'angular-architecture-patterns',          t: 'Angular Architecture Patterns',                    d: 'smart/dumb components, facade pattern, feature modules', r: '' },
+    { slug: 'micro-frontend-architecture',            t: 'Micro-Frontend Architecture',                      d: 'Module Federation, single-spa, routing, shared state, versioning', r: 'https://single-spa.js.org/' },
+    { slug: 'server-side-rendering-angular-nextjs',  t: 'Server-Side Rendering (Angular Universal / Next.js)',d: 'SSR, SSG, ISR, hydration, streaming', r: 'https://angular.dev/guide/ssr' },
+    { slug: 'custom-build-tooling-webpack-config',   t: 'Custom Build Tooling & Webpack Config',            d: 'custom webpack configs, loaders, plugins, optimization', r: '' },
+    { slug: 'monorepo-architecture-with-nx',         t: 'Monorepo Architecture with Nx',                    d: 'library boundaries, affected builds, generators, plugins', r: 'https://nx.dev/' },
+    { slug: 'migration-strategies',                  t: 'Migration Strategies',                             d: 'framework upgrades, incremental migration, strangler fig pattern', r: '' },
+    { slug: 'angular-standalone-components',         t: 'Angular Standalone Components',                    d: 'standalone, inject(), functional guards, withComponentInputBinding', r: 'https://angular.dev/guide/components/importing' },
+  ]},
+  { cat: 'state', topics: [
+    { slug: 'state-machine-patterns-xstate',   t: 'State Machine Patterns (XState)',   d: 'finite state machines, statecharts, actor model', r: 'https://xstate.js.org/' },
+    { slug: 'offline-first-state-sync',        t: 'Offline-First State Sync',          d: 'optimistic updates, conflict resolution, CRDT basics', r: '' },
+    { slug: 'global-vs-local-state-strategies',t: 'Global vs Local State Strategies',  d: 'when to use what, avoiding prop drilling, state colocation', r: '' },
+    { slug: 'real-time-state-with-websockets', t: 'Real-time State with WebSockets',   d: 'connection management, reconnection, state reconciliation', r: '' },
+  ]},
+  { cat: 'testing', topics: [
+    { slug: 'testing-strategy-and-pyramid',     t: 'Testing Strategy & Pyramid',          d: 'unit vs integration vs E2E ratios, what to test, ROI analysis', r: '' },
+    { slug: 'visual-regression-testing',        t: 'Visual Regression Testing',           d: 'Chromatic, Percy, screenshot comparison, CI integration', r: 'https://www.chromatic.com/' },
+    { slug: 'performance-testing-benchmarking', t: 'Performance Testing & Benchmarking',  d: 'Lighthouse CI, Web Vitals budgets, regression detection', r: '' },
+    { slug: 'contract-testing',                 t: 'Contract Testing',                    d: 'Pact, consumer-driven contracts, API compatibility', r: '' },
+    { slug: 'chaos-engineering-for-frontend',   t: 'Chaos Engineering for Frontend',      d: 'network failures, slow APIs, error boundaries testing', r: '' },
+  ]},
+  { cat: 'performance', topics: [
+    { slug: 'advanced-bundle-optimization',     t: 'Advanced Bundle Optimization',    d: 'dynamic imports, route-based splitting, shared chunks, module federation caching', r: '' },
+    { slug: 'rendering-performance',            t: 'Rendering Performance',           d: 'virtual DOM diffing, concurrent rendering, time-slicing, web workers', r: '' },
+    { slug: 'network-optimization',             t: 'Network Optimization',            d: 'HTTP/2 push, resource hints (preload/prefetch), early hints, Brotli/gzip', r: '' },
+    { slug: 'runtime-performance-profiling',    t: 'Runtime Performance Profiling',   d: 'Chrome Performance tab, flame charts, long tasks, layout thrashing', r: '' },
+    { slug: 'edge-computing-and-cdn-optimization',t: 'Edge Computing & CDN Optimization',d: 'edge functions, ISR, streaming HTML, geographic routing', r: '' },
+  ]},
+  { cat: 'accessibility', topics: [
+    { slug: 'accessibility-architecture-and-strategy',t: 'Accessibility Architecture & Strategy', d: 'org-wide a11y standards, component library a11y, automated pipelines', r: '' },
+    { slug: 'complex-widget-accessibility',           t: 'Complex Widget Accessibility',          d: 'data grids, drag-and-drop, charts, maps — ARIA patterns', r: 'https://www.w3.org/WAI/ARIA/apg/' },
+    { slug: 'accessibility-testing-in-cicd',          t: 'Accessibility Testing in CI/CD',        d: 'axe-core in pipelines, Lighthouse a11y scores, automated reports', r: '' },
+    { slug: 'inclusive-design-principles',            t: 'Inclusive Design Principles',           d: 'cognitive accessibility, motion sensitivity, voice control, mobile a11y', r: 'https://inclusivedesignprinciples.org/' },
+    { slug: 'legal-compliance-ada-en-301-549',        t: 'Legal Compliance (ADA, EN 301 549)',    d: 'VPAT, legal requirements, audit preparation', r: '' },
+  ]},
+  { cat: 'tooling', topics: [
+    { slug: 'advanced-cicd-and-deployment-strategies',t: 'Advanced CI/CD & Deployment Strategies', d: 'blue-green, canary, feature flags, rollback automation', r: '' },
+    { slug: 'infrastructure-as-code-for-frontend',    t: 'Infrastructure as Code for Frontend',    d: 'Terraform/Pulumi for CDN, S3, CloudFront setup', r: '' },
+    { slug: 'observability-and-monitoring',           t: 'Observability & Monitoring',             d: 'Sentry, DataDog RUM, error tracking, performance monitoring, alerting', r: '' },
+    { slug: 'custom-cli-tools-and-generators',        t: 'Custom CLI Tools & Generators',         d: 'Node.js CLI, scaffolding tools, code generators (Nx generators)', r: '' },
+    { slug: 'security-in-cicd',                       t: 'Security in CI/CD',                     d: 'dependency scanning, SAST, secret management, supply chain security', r: '' },
+  ]},
+  { cat: 'design', topics: [
+    { slug: 'frontend-system-design-interview-prep',  t: 'Frontend System Design Interview Prep',    d: 'design a component library, design Google Docs, design a dashboard', r: 'https://www.frontendinterviewhandbook.com/' },
+    { slug: 'scalable-component-api-design',          t: 'Scalable Component API Design',           d: 'composition patterns, render props, compound components, headless UI', r: '' },
+    { slug: 'design-url-shortener-rate-limiter',      t: 'Design URL Shortener / Rate Limiter',     d: 'system design classics — HLD, database, APIs, scaling', r: '' },
+    { slug: 'design-real-time-collaborative-editor',  t: 'Design Real-time Collaborative Editor',   d: 'CRDT vs OT, WebSocket architecture, conflict resolution', r: '' },
+    { slug: 'design-notification-system',             t: 'Design Notification System',              d: 'push, email, in-app — priority queues, delivery guarantees', r: '' },
+    { slug: 'design-ecommerce-platform',              t: 'Design E-commerce Platform',              d: 'microservices, cart, inventory, payment, search architecture', r: '' },
+    { slug: 'capacity-planning-and-trade-offs',       t: 'Capacity Planning & Trade-offs',          d: 'back-of-envelope calculations, CAP theorem, consistency models', r: '' },
+  ]},
+  { cat: 'dsa', topics: [
+    { slug: 'advanced-graph-algorithms',        t: 'Advanced Graph Algorithms',         d: 'Dijkstra, topological sort, Kruskal/Prim, strongly connected components', r: '' },
+    { slug: 'tries-and-advanced-string-algorithms',t: 'Tries & Advanced String Algorithms',d: 'trie implementation, autocomplete, KMP, Rabin-Karp', r: 'https://leetcode.com/tag/trie/' },
+    { slug: 'union-find-disjoint-set',          t: 'Union-Find / Disjoint Set',         d: 'path compression, union by rank, connected components', r: 'https://leetcode.com/tag/union-find/' },
+    { slug: 'monotonic-stack-and-queue-patterns',t: 'Monotonic Stack & Queue Patterns',  d: 'next greater element, sliding window maximum, trapping rain water', r: '' },
+    { slug: 'segment-trees-and-bit',            t: 'Segment Trees & BIT',               d: 'range queries, range updates, lazy propagation', r: '' },
+    { slug: 'hard-dp-problems',                 t: 'Hard DP Problems',                  d: 'burst balloons, palindrome partitioning, regex matching', r: '' },
+    { slug: 'system-design-algorithms',         t: 'System Design Algorithms',          d: 'consistent hashing, bloom filters, HyperLogLog, skip lists', r: '' },
+  ]},
+  { cat: 'ai', topics: [
+    { slug: 'building-mcp-servers',          t: 'Building MCP Servers',          d: 'server architecture, tool registration, resource exposure, transport protocols', r: 'https://modelcontextprotocol.io/' },
+    { slug: 'ai-agent-architectures',        t: 'AI Agent Architectures',        d: 'ReAct pattern, tool-calling agents, planning agents, multi-agent systems', r: '' },
+    { slug: 'llm-integration-frontend-apps', t: 'LLM Integration in Frontend Apps',d: 'streaming responses, function calling, structured output, error handling', r: '' },
+    { slug: 'building-ai-powered-features',  t: 'Building AI-Powered Features',  d: 'chat interfaces, autocomplete, content generation, semantic search', r: '' },
+    { slug: 'ai-assisted-code-migration',    t: 'AI-Assisted Code Migration',    d: 'using agents for large-scale codebase migrations, codemods', r: '' },
+    { slug: 'evaluating-ai-output-quality',  t: 'Evaluating AI Output Quality',  d: 'benchmarking, human eval, automated metrics, regression testing', r: '' },
+  ]},
+  { cat: 'soft', topics: [
+    { slug: 'technical-leadership-and-influence',   t: 'Technical Leadership & Influence',  d: 'driving architectural decisions, building consensus, RFCs', r: '' },
+    { slug: 'mentoring-and-growing-team-members',   t: 'Mentoring & Growing Team Members',  d: '1:1s, career development, performance feedback, delegation', r: '' },
+    { slug: 'cross-functional-collaboration',       t: 'Cross-functional Collaboration',    d: 'working with product, design, backend, DevOps, stakeholders', r: '' },
+    { slug: 'incident-management-and-postmortems',  t: 'Incident Management & Postmortems', d: 'incident response, blameless postmortems, RCA, action items', r: '' },
+    { slug: 'technical-debt-management',            t: 'Technical Debt Management',         d: 'identification, prioritization, communicating to stakeholders', r: '' },
+    { slug: 'public-speaking-and-knowledge-sharing',t: 'Public Speaking & Knowledge Sharing',d: 'tech talks, blog writing, conference proposals, community', r: '' },
+  ]},
+]
