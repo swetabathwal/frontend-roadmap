@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { AppProvider, useApp } from './context/AppContext'
+import { InterviewProvider } from './context/InterviewContext'
 import { Header } from './components/Header'
 import { Dashboard } from './pages/Dashboard'
 import { LevelView } from './pages/LevelView'
@@ -13,6 +14,7 @@ import { LoginPage } from './pages/LoginPage'
 import { SignupPage } from './pages/SignupPage'
 import { PublicProfileView } from './pages/PublicProfileView'
 import { CategoryView } from './pages/CategoryView'
+import { InterviewListView } from './pages/InterviewListView'
 
 function AuthenticatedApp() {
   const { ready } = useApp()
@@ -39,6 +41,7 @@ function AuthenticatedApp() {
           <Route path="/bookmarks"         element={<BookmarksView />} />
           <Route path="/planner"           element={<PlannerView />} />
           <Route path="/stats"             element={<StatsView />} />
+          <Route path="/interview-prep"    element={<InterviewListView />} />
           <Route path="*"                  element={<Navigate to="/" replace />} />
         </Routes>
       </main>
@@ -74,8 +77,10 @@ function AuthGate() {
   }
 
   return (
-    <AppProvider userId={user.uid}>
-      <AuthenticatedApp />
+    <AppProvider userId={user.id}>
+      <InterviewProvider userId={user.id}>
+        <AuthenticatedApp />
+      </InterviewProvider>
     </AppProvider>
   )
 }

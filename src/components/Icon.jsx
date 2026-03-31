@@ -110,6 +110,34 @@ const PATHS = {
       <path d="M12 6v12M6 12h12" stroke="currentColor" fill="none" strokeWidth="1.5" strokeLinecap="round" />
     </>
   ),
+  sparkles: (
+    <>
+      <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" stroke="currentColor" fill="none" strokeWidth="1.8" strokeLinejoin="round" />
+      <path d="M19 3l.8 2.2L22 6l-2.2.8L19 9l-.8-2.2L16 6l2.2-.8L19 3z" stroke="currentColor" fill="none" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M5 17l.6 1.4L7 19l-1.4.6L5 21l-.6-1.4L3 19l1.4-.6L5 17z" stroke="currentColor" fill="none" strokeWidth="1.5" strokeLinejoin="round" />
+    </>
+  ),
+  eye: (
+    <>
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" fill="none" strokeWidth="2" />
+      <circle cx="12" cy="12" r="3" stroke="currentColor" fill="none" strokeWidth="2" />
+    </>
+  ),
+  eyeOff: (
+    <>
+      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19M1 1l22 22" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" />
+      <path d="M10.73 10.73a3 3 0 004.24 4.24" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" />
+    </>
+  ),
+  pencil: (
+    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  ),
+  chevronDown: (
+    <path d="M6 9l6 6 6-6" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  ),
+  chevronUp: (
+    <path d="M18 15l-6-6-6 6" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  ),
 }
 
 /**

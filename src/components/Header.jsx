@@ -4,10 +4,11 @@ import { useAuth } from '../context/AuthContext'
 import { Icon } from './Icon'
 
 const NAV_ITEMS = [
-  { to: '/',          label: 'Home',    icon: 'grid',     end: true  },
-  { to: '/bookmarks', label: 'Saved',   icon: 'bookmark', end: false },
-  { to: '/planner',   label: 'Planner', icon: 'calendar', end: false },
-  { to: '/stats',     label: 'Stats',   icon: 'chart',    end: false },
+  { to: '/',                label: 'Home',      icon: 'grid',       end: true  },
+  { to: '/bookmarks',       label: 'Saved',     icon: 'bookmark',   end: false },
+  { to: '/planner',         label: 'Planner',   icon: 'calendar',   end: false },
+  { to: '/stats',           label: 'Stats',     icon: 'chart',      end: false },
+  { to: '/interview-prep',  label: 'Interview', icon: 'sparkles',   end: false },
 ]
 
 export function Header() {
