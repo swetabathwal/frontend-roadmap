@@ -10,7 +10,7 @@ function getErrorMessage(message) {
   return message
 }
 
-export function LoginPage({ onSwitch }) {
+export function LoginPage({ onSwitch, onForgot }) {
   const { login } = useAuth()
   const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
@@ -95,15 +95,25 @@ export function LoginPage({ onSwitch }) {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-            Don&apos;t have an account?{' '}
-            <button
-              onClick={onSwitch}
-              className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
-            >
-              Create one
-            </button>
-          </p>
+          <div className="mt-6 space-y-3 text-center text-sm text-slate-500 dark:text-slate-400">
+            <p>
+              <button
+                onClick={onForgot}
+                className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                Forgot your password?
+              </button>
+            </p>
+            <p>
+              Don&apos;t have an account?{' '}
+              <button
+                onClick={onSwitch}
+                className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                Create one
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>
