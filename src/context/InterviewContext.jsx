@@ -114,6 +114,27 @@ async function patchQuestion(questionId, patch) {
   }
 }
 
+async function insertQuestions(experienceId, questions) {
+  if (!questions.length) return
+  try {
+    await supabase
+      .from('interview_questions')
+      .insert(
+        questions.map((q) => ({
+          id:                  q.id,
+          experience_id:       experienceId,
+          question_text:       q.questionText,
+          category:            q.category,
+          ai_generated_answer: q.aiGeneratedAnswer,
+          user_edited_answer:  q.userEditedAnswer,
+          status:              q.status,
+        })),
+      )
+  } catch (err) {
+    console.error('[InterviewContext] insertQuestions failed:', err)
+  }
+}
+
 async function removeExperience(experienceId) {
   try {
     // interview_questions cascade-deletes via FK
@@ -124,6 +145,32 @@ async function removeExperience(experienceId) {
   } catch (err) {
     console.error('[InterviewContext] removeExperience failed:', err)
   }
+}
+
+/**
+ * Merges cloud experiences with local ones.
+ * If a cloud experience has 0 questions but local has questions for the same id,
+ * the local questions are used (the cloud insert likely failed silently).
+ * Returns { merged, toResync } where toResync is a list of experiences
+ * whose questions need to be re-inserted into Supabase.
+ */
+function mergeWithLocal(cloudData, localData) {
+  const localById = new Map(
+    (localData?.experiences ?? []).map((exp) => [exp.id, exp]),
+  )
+
+  const toResync = []
+  const merged = cloudData.map((cloudExp) => {
+    if (cloudExp.questions.length > 0) return cloudExp
+    const localExp = localById.get(cloudExp.id)
+    if (localExp?.questions?.length > 0) {
+      toResync.push({ id: cloudExp.id, questions: localExp.questions })
+      return { ...cloudExp, questions: localExp.questions }
+    }
+    return cloudExp
+  })
+
+  return { merged, toResync }
 }
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
@@ -149,10 +196,15 @@ export function InterviewProvider({ children, userId }) {
       }
 
       if (cloudData.length > 0) {
-        // Cloud has data — use it as source of truth
-        const next = { experiences: cloudData }
+        // Cloud has experiences — merge with local to recover any questions
+        // that failed to sync (cloud experience rows exist but questions rows are missing)
+        const local = loadLocal()
+        const { merged, toResync } = mergeWithLocal(cloudData, local)
+        const next = { experiences: merged }
         setState(next)
         saveLocal(next)
+        // Re-insert any questions that made it locally but not to Supabase
+        toResync.forEach(({ id, questions }) => insertQuestions(id, questions))
       } else {
         // Cloud returned empty — check if we have local experiences that failed to sync
         const local = loadLocal()
