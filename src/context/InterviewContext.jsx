@@ -96,8 +96,10 @@ async function insertExperience(userId, experience) {
         )
       if (qErr) throw qErr
     }
+    return true
   } catch (err) {
-    console.error('[InterviewContext] insertExperience failed:', err)
+    console.error('[InterviewContext] insertExperience failed — data saved locally only:', err)
+    return false
   }
 }
 
@@ -139,12 +141,29 @@ export function InterviewProvider({ children, userId }) {
   useEffect(() => {
     if (!userId) return
     setReady(false)
-    fetchExperiences(userId).then((data) => {
-      if (data) {
-        const next = { experiences: data }
+    fetchExperiences(userId).then((cloudData) => {
+      if (cloudData === null) {
+        // Fetch failed (network / auth error) — keep whatever is in localStorage
+        setReady(true)
+        return
+      }
+
+      if (cloudData.length > 0) {
+        // Cloud has data — use it as source of truth
+        const next = { experiences: cloudData }
         setState(next)
         saveLocal(next)
+      } else {
+        // Cloud returned empty — check if we have local experiences that failed to sync
+        const local = loadLocal()
+        const localExperiences = local?.experiences ?? []
+        if (localExperiences.length > 0) {
+          // Re-insert any local-only experiences back into Supabase
+          localExperiences.forEach((exp) => insertExperience(userId, exp))
+          // Keep local state; don't wipe it
+        }
       }
+
       setReady(true)
     })
   }, [userId])
