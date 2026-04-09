@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow private app routes (auth-gated, no value for crawlers)
+Disallow: /bookmarks
+Disallow: /planner
+Disallow: /stats
+Disallow: /interview-prep
+
+Sitemap: https://frontenddevroadmap.com/sitemap.xml
