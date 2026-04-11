@@ -26,4 +26,5 @@ export const DEFAULT_STATE = {
   searchQuery: '',
   plannerTasks: [],
   interviewHistory: {},
+  quizAttempts: {}, // { [topicKey]: number } — attempt count per topic
 }
