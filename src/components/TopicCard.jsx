@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { Icon } from './Icon'
 import { InterviewModal } from './InterviewModal'
 import { QuizModal } from './QuizModal'
 import { StudyMaterialModal } from './StudyMaterialModal'
+import { burstConfetti } from '../utils/confetti'
 
 /**
  * @param {{ topic: {slug:string, t:string, d:string, r:string}, catId: string, levelId: string }} props
@@ -19,6 +20,7 @@ export function TopicCard({ topic, catId, levelId }) {
   const [showInterview, setShowInterview] = useState(false)
   const [showQuiz,      setShowQuiz]      = useState(false)
   const [showStudy,     setShowStudy]     = useState(false)
+  const checkboxRef = useRef(null)
 
   // How many quiz attempts have been made for this topic
   const quizAttempt = state.quizAttempts?.[key] ?? 0
@@ -47,6 +49,8 @@ export function TopicCard({ topic, catId, levelId }) {
       checked: { ...s.checked, [key]: true },
     }))
     setShowQuiz(false)
+    // Celebrate the win
+    burstConfetti(checkboxRef.current)
   }
 
   /**
@@ -67,23 +71,26 @@ export function TopicCard({ topic, catId, levelId }) {
 
   return (
     <div
-      className={`card px-4 py-3 mb-2 transition-opacity ${isChecked ? 'opacity-60' : 'opacity-100'}`}
+      className={`card px-4 py-3 mb-2 transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-500/60 hover:shadow-md ${
+        isChecked ? 'opacity-70' : 'opacity-100'
+      }`}
     >
       <div className="flex items-start gap-3">
         {/* Checkbox — opens quiz for unchecked topics */}
         <button
+          ref={checkboxRef}
           onClick={handleCheckboxClick}
           role="checkbox"
           aria-checked={isChecked}
           aria-label={`Mark "${topic.t}" as ${isChecked ? 'incomplete' : 'complete'}`}
           title={isChecked ? 'Mark as incomplete' : 'Mark as complete (requires knowledge check)'}
-          className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
+          className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 active:scale-90 ${
             isChecked
-              ? 'bg-emerald-500 border-emerald-500'
-              : 'border-slate-300 dark:border-slate-600 hover:border-indigo-400'
+              ? 'bg-emerald-500 border-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.18)]'
+              : 'border-slate-300 dark:border-slate-600 hover:border-indigo-400 hover:scale-110'
           }`}
         >
-          {isChecked && <Icon name="check" size={13} className="text-white" />}
+          {isChecked && <Icon name="check" size={13} className="text-white animate-check-pop" />}
         </button>
 
         {/* Content — clicking title opens study material */}

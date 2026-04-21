@@ -11,23 +11,23 @@ const NAV_ITEMS = [
   { to: '/interview-prep',  label: 'Interview', icon: 'sparkles',   end: false },
 ]
 
-export function Header() {
+export function Header({ focusOpen, onToggleFocus }) {
   const { state, toggleDark } = useApp()
   const { user, logout } = useAuth()
 
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/85 dark:bg-slate-800/85 backdrop-blur border-b border-slate-200 dark:border-slate-700 shadow-sm">
       <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
 
         {/* Logo */}
         <NavLink
           to="/"
-          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity group"
           aria-label="Go to dashboard"
         >
-          <span className="text-2xl" aria-hidden="true">📚</span>
+          <span className="text-2xl transition-transform group-hover:-rotate-6 group-hover:scale-110" aria-hidden="true">📚</span>
           <div className="text-left">
-            <p className="text-base font-extrabold text-slate-900 dark:text-white leading-tight">
+            <p className="text-base font-extrabold leading-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
               Frontend Dev Roadmap
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400">Junior → Staff Complete Guide</p>
@@ -53,6 +53,21 @@ export function Header() {
               <span className="hidden sm:inline">{label}</span>
             </NavLink>
           ))}
+
+          <button
+            onClick={onToggleFocus}
+            className={`ml-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-semibold transition-all ${
+              focusOpen
+                ? 'bg-indigo-500 text-white shadow-glow-indigo'
+                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+            }`}
+            aria-label={focusOpen ? 'Close focus timer' : 'Open focus timer'}
+            aria-pressed={focusOpen}
+            title="Focus Mode — Pomodoro timer"
+          >
+            <span aria-hidden="true" className="text-base leading-none">🎯</span>
+            <span className="hidden md:inline">Focus</span>
+          </button>
 
           <button
             onClick={toggleDark}

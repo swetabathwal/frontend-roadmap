@@ -7,6 +7,7 @@ import { InterviewProvider } from './context/InterviewContext'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { CookieConsent } from './components/CookieConsent'
+import { FocusTimer } from './components/FocusTimer'
 import { Dashboard } from './pages/Dashboard'
 import { LevelView } from './pages/LevelView'
 import { BookmarksView } from './pages/BookmarksView'
@@ -48,6 +49,22 @@ function PublicRoutes() {
 
 function AuthenticatedApp() {
   const { ready } = useApp()
+  const [focusOpen, setFocusOpen] = useState(false)
+
+  // Keyboard shortcut: F toggles focus mode (ignored while typing in inputs)
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key !== 'f' && e.key !== 'F') return
+      const t = e.target
+      const tag = t?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || t?.isContentEditable) return
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+      e.preventDefault()
+      setFocusOpen((v) => !v)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   if (!ready) {
     return (
@@ -62,7 +79,8 @@ function AuthenticatedApp() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200 flex flex-col">
-      <Header />
+      <Header focusOpen={focusOpen} onToggleFocus={() => setFocusOpen((v) => !v)} />
+      <FocusTimer open={focusOpen} onClose={() => setFocusOpen(false)} />
       <main className="flex-1 max-w-screen-xl w-full mx-auto px-4 py-6 pb-20">
         <Routes>
           <Route path="/"                   element={<Dashboard />} />
