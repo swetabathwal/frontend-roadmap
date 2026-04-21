@@ -17,6 +17,9 @@ export default {
           700: '#4338ca',
         },
       },
+      boxShadow: {
+        'glow-indigo': '0 0 0 3px rgba(99,102,241,0.18), 0 8px 28px -8px rgba(99,102,241,0.45)',
+      },
     },
   },
   plugins: [],
