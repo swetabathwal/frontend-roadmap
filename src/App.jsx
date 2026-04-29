@@ -11,7 +11,7 @@ import { FocusTimer } from './components/FocusTimer'
 import { Dashboard } from './pages/Dashboard'
 import { LevelView } from './pages/LevelView'
 import { BookmarksView } from './pages/BookmarksView'
-import { PlannerView } from './pages/PlannerView'
+// import { PlannerView } from './pages/PlannerView'  // hidden until next release
 import { StatsView } from './pages/StatsView'
 import { LoginPage } from './pages/LoginPage'
 import { SignupPage } from './pages/SignupPage'
@@ -87,7 +87,7 @@ function AuthenticatedApp() {
           <Route path="/level/:levelId"      element={<LevelView />} />
           <Route path="/category/:categoryId" element={<CategoryView />} />
           <Route path="/bookmarks"          element={<BookmarksView />} />
-          <Route path="/planner"            element={<PlannerView />} />
+          {/* <Route path="/planner" element={<PlannerView />} /> */}  {/* hidden until next release */}
           <Route path="/stats"              element={<StatsView />} />
           <Route path="/interview-prep"     element={<InterviewListView />} />
           {/* Legal pages also accessible when logged in */}
