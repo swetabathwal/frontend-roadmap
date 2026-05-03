@@ -5,3 +5,12 @@ dist
 .env
 .env.*
 !.env.example
+
+# Graphify outputs
+graphify-out/
+
+# Claude skills
+.claude/
+
+# Vite temp files
+vite.config.js.timestamp-*
