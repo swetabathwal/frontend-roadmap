@@ -7,4 +7,4 @@ Disallow: /planner
 Disallow: /stats
 Disallow: /interview-prep
 
-Sitemap: https://frontenddevroadmap.com/sitemap.xml
+Sitemap: https://frontend-roadmap-eta.vercel.app/sitemap.xml
