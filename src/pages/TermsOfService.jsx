@@ -2,17 +2,19 @@ import { Link } from 'react-router-dom'
 
 const LAST_UPDATED = 'April 9, 2026'
 
-export function TermsOfService() {
+export function TermsOfService({ embedded = false }) {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 px-4 py-12">
+    <div className={embedded ? 'px-0 py-0' : 'min-h-screen bg-slate-50 dark:bg-slate-900 px-4 py-12'}>
       <div className="max-w-3xl mx-auto">
 
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-sm text-indigo-600 dark:text-indigo-400 hover:underline mb-8"
-        >
-          ← Back to app
-        </Link>
+        {!embedded && (
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm text-indigo-600 dark:text-indigo-400 hover:underline mb-8"
+          >
+            ← Back to app
+          </Link>
+        )}
 
         <div className="card p-8 space-y-8">
           <div>

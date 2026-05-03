@@ -311,6 +311,11 @@ export function InterviewProvider({ children, userId }) {
     [userId],
   )
 
+  // Clean up pending debounce timers on unmount
+  useEffect(() => () => {
+    Object.values(answerTimers.current).forEach(clearTimeout)
+  }, [])
+
   const value = useMemo(
     () => ({ state, ready, addExperience, updateAnswer, markReviewed, deleteExperience }),
     [state, ready, addExperience, updateAnswer, markReviewed, deleteExperience],

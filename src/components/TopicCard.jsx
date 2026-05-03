@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useApp } from '../context/AppContext'
 import { Icon } from './Icon'
 import { InterviewModal } from './InterviewModal'
@@ -6,9 +6,6 @@ import { QuizModal } from './QuizModal'
 import { StudyMaterialModal } from './StudyMaterialModal'
 import { burstConfetti } from '../utils/confetti'
 
-/**
- * @param {{ topic: {slug:string, t:string, d:string, r:string}, catId: string, levelId: string }} props
- */
 export function TopicCard({ topic, catId, levelId }) {
   const { state, update } = useApp()
   const key = `${levelId}::${catId}::${topic.slug}`
@@ -20,50 +17,45 @@ export function TopicCard({ topic, catId, levelId }) {
   const [showInterview, setShowInterview] = useState(false)
   const [showQuiz,      setShowQuiz]      = useState(false)
   const [showStudy,     setShowStudy]     = useState(false)
+  const [noteSaveStatus, setNoteSaveStatus] = useState('')
   const checkboxRef = useRef(null)
+  const saveTimerRef = useRef(null)
 
-  // How many quiz attempts have been made for this topic
   const quizAttempt = state.quizAttempts?.[key] ?? 0
 
   const toggleBm = () => update((s) => ({ ...s, bookmarks: { ...s.bookmarks, [key]: !isBookmarked } }))
-  const setNote  = (v) => update((s) => ({ ...s, notes:    { ...s.notes,     [key]: v            } }))
+  const setNote  = (v) => {
+    update((s) => ({ ...s, notes: { ...s.notes, [key]: v } }))
+    setNoteSaveStatus('saving')
+    clearTimeout(saveTimerRef.current)
+    saveTimerRef.current = setTimeout(() => setNoteSaveStatus('saved'), 600)
+  }
 
-  /**
-   * Clicking the checkbox:
-   * - If already checked → uncheck immediately (no quiz needed to uncheck)
-   * - If not checked → open quiz to verify understanding before marking complete
-   */
+  useEffect(() => () => clearTimeout(saveTimerRef.current), [])
+
   function handleCheckboxClick() {
     if (isChecked) {
-      // Uncheck directly
       update((s) => ({ ...s, checked: { ...s.checked, [key]: false } }))
     } else {
       setShowQuiz(true)
     }
   }
 
-  /** Called when the quiz is passed — mark topic as complete */
   function handleQuizPass() {
     update((s) => ({
       ...s,
       checked: { ...s.checked, [key]: true },
     }))
     setShowQuiz(false)
-    // Celebrate the win
     burstConfetti(checkboxRef.current)
   }
 
-  /**
-   * Called when quiz is closed.
-   * If reason is 'retry', increment the attempt counter so next quiz uses new questions.
-   */
   function handleQuizClose(reason) {
     if (reason === 'retry') {
       update((s) => ({
         ...s,
         quizAttempts: { ...s.quizAttempts, [key]: (s.quizAttempts?.[key] ?? 0) + 1 },
       }))
-      // Keep quiz open so the new attempt renders immediately
     } else {
       setShowQuiz(false)
     }
@@ -76,14 +68,13 @@ export function TopicCard({ topic, catId, levelId }) {
       }`}
     >
       <div className="flex items-start gap-3">
-        {/* Checkbox — opens quiz for unchecked topics */}
         <button
           ref={checkboxRef}
           onClick={handleCheckboxClick}
           role="checkbox"
           aria-checked={isChecked}
           aria-label={`Mark "${topic.t}" as ${isChecked ? 'incomplete' : 'complete'}`}
-          title={isChecked ? 'Mark as incomplete' : 'Mark as complete (requires knowledge check)'}
+          title={isChecked ? 'Mark as incomplete' : 'Take quiz to mark complete'}
           className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 active:scale-90 ${
             isChecked
               ? 'bg-emerald-500 border-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.18)]'
@@ -93,7 +84,6 @@ export function TopicCard({ topic, catId, levelId }) {
           {isChecked && <Icon name="check" size={13} className="text-white animate-check-pop" />}
         </button>
 
-        {/* Content — clicking title opens study material */}
         <div className="flex-1 min-w-0">
           <button
             onClick={() => setShowStudy(true)}
@@ -113,21 +103,28 @@ export function TopicCard({ topic, catId, levelId }) {
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{topic.d}</p>
 
           {showNote && (
-            <textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Write your notes here…"
-              className="input mt-2 resize-y min-h-[60px] text-xs"
-              aria-label={`Notes for ${topic.t}`}
-            />
+            <div className="mt-2">
+              <textarea
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Write your notes here\u2026"
+                className="input resize-y min-h-[60px] text-xs"
+                aria-label={`Notes for ${topic.t}`}
+              />
+              {noteSaveStatus && (
+                <p className={`text-xs mt-1 transition-opacity ${noteSaveStatus === 'saving' ? 'text-slate-400' : 'text-emerald-500'}`}>
+                  {noteSaveStatus === 'saving' ? 'Saving\u2026' : 'Saved \u2713'}
+                </p>
+              )}
+            </div>
           )}
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={() => setShowNote((v) => !v)}
             title={showNote ? 'Hide notes' : 'Add notes'}
+            aria-label={showNote ? `Hide notes for ${topic.t}` : `Add notes for ${topic.t}`}
             className={`p-1.5 rounded-md transition-colors ${
               note
                 ? 'text-amber-500 bg-amber-50 dark:bg-amber-900/30'
@@ -140,6 +137,7 @@ export function TopicCard({ topic, catId, levelId }) {
           <button
             onClick={toggleBm}
             title={isBookmarked ? 'Remove bookmark' : 'Bookmark'}
+            aria-label={isBookmarked ? `Remove bookmark for ${topic.t}` : `Bookmark ${topic.t}`}
             className={`p-1.5 rounded-md transition-colors ${
               isBookmarked
                 ? 'text-amber-500'
@@ -173,7 +171,6 @@ export function TopicCard({ topic, catId, levelId }) {
         </div>
       </div>
 
-      {/* Quiz Modal — triggered by checkbox click on unchecked topic */}
       {showQuiz && (
         <QuizModal
           topicTitle={topic.t}
@@ -184,7 +181,6 @@ export function TopicCard({ topic, catId, levelId }) {
         />
       )}
 
-      {/* Study Material Modal — triggered by clicking topic title */}
       {showStudy && (
         <StudyMaterialModal
           topic={topic}
@@ -195,7 +191,6 @@ export function TopicCard({ topic, catId, levelId }) {
         />
       )}
 
-      {/* Mock Interview Modal */}
       {showInterview && (
         <InterviewModal
           topicKey={key}

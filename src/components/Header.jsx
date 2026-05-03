@@ -80,22 +80,29 @@ export function Header({ focusOpen, onToggleFocus }) {
           {user && (
             <div className="ml-2 flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-600">
               <div className="hidden sm:flex flex-col items-end">
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-tight max-w-[120px] truncate">
+                <span
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-tight max-w-[120px] truncate"
+                  title={user.user_metadata?.display_name || user.email}
+                >
                   {user.user_metadata?.display_name || user.email}
                 </span>
                 {user.user_metadata?.display_name && (
-                  <span className="text-xs text-slate-400 dark:text-slate-500 max-w-[120px] truncate">
+                  <span
+                    className="text-xs text-slate-400 dark:text-slate-500 max-w-[120px] truncate"
+                    title={user.email}
+                  >
                     {user.email}
                   </span>
                 )}
               </div>
               <button
                 onClick={logout}
-                className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 transition-colors"
+                className="flex items-center gap-1.5 p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 transition-colors"
                 aria-label="Sign out"
                 title="Sign out"
               >
                 <Icon name="logout" size={17} />
+                <span className="hidden md:inline text-xs font-medium">Sign out</span>
               </button>
             </div>
           )}

@@ -292,33 +292,46 @@ export function InterviewIngestor() {
         <label htmlFor="raw-experience" className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
           Interview Experience Post
         </label>
-        <textarea
-          id="raw-experience"
-          value={rawText}
-          onChange={(e) => setRawText(e.target.value)}
-          placeholder={
-            'Paste the full post here…\n\nExample:\n"I interviewed at Google for a Senior Frontend role. ' +
-            'Round 1 was a technical screen — they asked me to explain the difference between ' +
-            'useMemo and useCallback, then asked about the virtual DOM. Round 2 was system design…"'
-          }
-          rows={10}
-          className="input resize-y min-h-[200px] leading-relaxed"
-          aria-label="Interview experience post"
-        />
-        <p className="text-xs text-slate-400 dark:text-slate-500 text-right">
-          {rawText.length.toLocaleString()} / 20,000 characters
-        </p>
+        <div className="relative">
+          <textarea
+            id="raw-experience"
+            value={rawText}
+            onChange={(e) => setRawText(e.target.value)}
+            placeholder={
+              'Paste the full post here…\n\nExample:\n"I interviewed at Google for a Senior Frontend role. ' +
+              'Round 1 was a technical screen — they asked me to explain the difference between ' +
+              'useMemo and useCallback, then asked about the virtual DOM. Round 2 was system design…"'
+            }
+            rows={10}
+            className="input resize-y min-h-[200px] leading-relaxed pb-7"
+            aria-label="Interview experience post"
+          />
+          <span className="absolute bottom-2 right-3 text-xs text-slate-400 dark:text-slate-500 pointer-events-none">
+            {rawText.length.toLocaleString()} / 20,000
+          </span>
+        </div>
       </div>
 
       {/* Submit */}
-      <button
-        onClick={handleSynthesize}
-        disabled={!rawText.trim() || !companyName.trim()}
-        className="btn-primary w-full justify-center py-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <Icon name="sparkles" size={16} />
-        Synthesize Interview
-      </button>
+      <div>
+        <button
+          onClick={handleSynthesize}
+          disabled={!rawText.trim() || !companyName.trim()}
+          className="btn-primary w-full justify-center py-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Icon name="sparkles" size={16} />
+          Synthesize Interview
+        </button>
+        {(!rawText.trim() || !companyName.trim()) && (
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 text-center">
+            {!companyName.trim() && !rawText.trim()
+              ? 'Enter a company name and paste at least 100 characters to enable.'
+              : !companyName.trim()
+              ? 'Enter a company name to enable.'
+              : 'Paste at least 100 characters to enable.'}
+          </p>
+        )}
+      </div>
     </div>
   )
 }

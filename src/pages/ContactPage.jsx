@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export function ContactPage() {
+export function ContactPage({ embedded = false }) {
   const [copied, setCopied] = useState(false)
   const SUPPORT_EMAIL = 'frontendroadmapdev@gmail.com'
 
@@ -12,15 +12,17 @@ export function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 px-4 py-12">
+    <div className={embedded ? 'px-0 py-0' : 'min-h-screen bg-slate-50 dark:bg-slate-900 px-4 py-12'}>
       <div className="max-w-2xl mx-auto">
 
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-sm text-indigo-600 dark:text-indigo-400 hover:underline mb-8"
-        >
-          ← Back to app
-        </Link>
+        {!embedded && (
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm text-indigo-600 dark:text-indigo-400 hover:underline mb-8"
+          >
+            ← Back to app
+          </Link>
+        )}
 
         <div className="space-y-6">
           <div>

@@ -1,18 +1,6 @@
 import { Icon } from './Icon'
 
-/**
- * Study Material Modal — opens when user clicks a topic title.
- * Displays structured study content derived from the topic's data.
- *
- * Props:
- *   topic    - { slug, t, d, r }
- *   levelId  - string
- *   catId    - string
- *   onClose  - () => void
- *   onStartQuiz - () => void (optional shortcut to open quiz)
- */
 export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz }) {
-  // Parse the topic description (comma/semicolon separated keywords) into bullets
   const concepts = topic.d
     ? topic.d
         .split(/[,;]/)
@@ -20,11 +8,10 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
         .filter(Boolean)
     : []
 
-  // Build a short level label
   const levelLabel = {
-    junior: 'Junior (0–1 yr)',
-    mid: 'Mid-level (1–3 yr)',
-    senior: 'Senior (3–6 yr)',
+    junior: 'Junior (0\u20131 yr)',
+    mid: 'Mid-level (1\u20133 yr)',
+    senior: 'Senior (3\u20136 yr)',
     staff: 'Staff / Principal (6+ yr)',
   }[levelId] ?? levelId
 
@@ -33,16 +20,15 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative w-full max-w-lg card shadow-2xl flex flex-col max-h-[90vh]">
+      <div role="dialog" aria-modal="true" aria-labelledby="study-modal-title" className="relative w-full max-w-lg card shadow-2xl flex flex-col max-h-[90vh]">
 
-        {/* Header */}
         <div className="flex items-start justify-between p-4 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
           <div className="flex items-start gap-3">
             <div className="w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center flex-shrink-0 mt-0.5">
               <Icon name="note" size={18} className="text-indigo-500" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-800 dark:text-slate-100 leading-tight">
+              <h2 id="study-modal-title" className="text-base font-bold text-slate-800 dark:text-slate-100 leading-tight">
                 {topic.t}
               </h2>
               <div className="flex gap-2 mt-1 flex-wrap">
@@ -57,16 +43,14 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
           </div>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 flex-shrink-0"
           >
             <Icon name="x" size={16} />
           </button>
         </div>
 
-        {/* Body */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-
-          {/* What to learn */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">
               What to learn
@@ -76,7 +60,6 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
             </p>
           </div>
 
-          {/* Key concepts */}
           {concepts.length > 1 && (
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">
@@ -93,7 +76,6 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
             </div>
           )}
 
-          {/* Study tips */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">
               How to study this topic
@@ -101,7 +83,7 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
             <ol className="space-y-2">
               {[
                 'Read the official documentation or recommended resource below.',
-                'Code along with examples — don\'t just read, type it out.',
+                "Code along with examples \u2014 don't just read, type it out.",
                 'Build a small experiment or mini-project using this concept.',
                 'Explain it in your own words (rubber duck debugging helps!).',
                 'Take the knowledge check quiz when you feel ready.',
@@ -116,7 +98,6 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
             </ol>
           </div>
 
-          {/* Resource link */}
           {topic.r && (
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">
@@ -140,7 +121,6 @@ export function StudyMaterialModal({ topic, levelId, catId, onClose, onStartQuiz
           )}
         </div>
 
-        {/* Footer */}
         <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex gap-3 flex-shrink-0">
           <button onClick={onClose} className="btn-secondary flex-1 text-sm">
             Close

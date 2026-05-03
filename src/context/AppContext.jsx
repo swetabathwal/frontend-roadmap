@@ -44,29 +44,20 @@ async function saveUserData(uid, state) {
 export function AppProvider({ children, userId }) {
   const [state, setState] = useState(() => {
     const loaded = loadState()
-    // Run key migration on whatever is in localStorage.
-    // If keys are already slug-based this is a no-op; if they're title-based
-    // they are converted. The migrated state is persisted back immediately.
     const raw      = { ...DEFAULT_STATE, ...(loaded ?? {}) }
     const migrated = migrateProgressKeys(raw)
-    if (loaded) saveState(migrated) // persist migrated keys right away
+    if (loaded) saveState(migrated)
     return migrated
   })
 
-  // ready = false while we wait for Supabase to load the user's data
   const [ready, setReady] = useState(!userId)
   const saveTimer = useRef(null)
 
-  // When userId appears (user logs in), load their data from Supabase
   useEffect(() => {
     if (!userId) return
     setReady(false)
     loadUserData(userId).then((data) => {
       if (data) {
-        // Migrate cloud data too — handles accounts that had progress before
-        // this refactor and whose Supabase rows still contain title-based keys.
-        // Preserve interviewHistory from localStorage — it's local-only and
-        // would be wiped if we spread Supabase data over the current state.
         const localInterviewHistory = loadState()?.interviewHistory ?? {}
         const migrated = migrateProgressKeys({
           ...DEFAULT_STATE,
@@ -75,7 +66,6 @@ export function AppProvider({ children, userId }) {
         })
         setState(migrated)
         saveState(migrated)
-        // Persist migrated keys back to Supabase so they don't migrate again
         saveUserData(userId, migrated)
       }
       setReady(true)
@@ -85,9 +75,8 @@ export function AppProvider({ children, userId }) {
   const update = useCallback((fnOrPatch) => {
     setState((prev) => {
       const next = typeof fnOrPatch === 'function' ? fnOrPatch(prev) : { ...prev, ...fnOrPatch }
-      saveState(next) // immediate localStorage save
+      saveState(next)
       if (userId) {
-        // debounced Supabase save (1.5 s)
         clearTimeout(saveTimer.current)
         saveTimer.current = setTimeout(() => saveUserData(userId, next), 1500)
       }
@@ -96,6 +85,9 @@ export function AppProvider({ children, userId }) {
   }, [userId])
 
   const toggleDark = useCallback(() => update((s) => ({ ...s, dark: !s.dark })), [update])
+
+  // Clean up pending save timer on unmount
+  useEffect(() => () => clearTimeout(saveTimer.current), [])
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', state.dark)

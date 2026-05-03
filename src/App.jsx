@@ -6,6 +6,7 @@ import { AppProvider, useApp } from './context/AppContext'
 import { InterviewProvider } from './context/InterviewContext'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { CookieConsent } from './components/CookieConsent'
 import { FocusTimer } from './components/FocusTimer'
 import { Dashboard } from './pages/Dashboard'
@@ -79,9 +80,15 @@ function AuthenticatedApp() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200 flex flex-col">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-semibold"
+      >
+        Skip to main content
+      </a>
       <Header focusOpen={focusOpen} onToggleFocus={() => setFocusOpen((v) => !v)} />
       <FocusTimer open={focusOpen} onClose={() => setFocusOpen(false)} />
-      <main className="flex-1 max-w-screen-xl w-full mx-auto px-4 py-6 pb-20">
+      <main id="main" className="flex-1 max-w-screen-xl w-full mx-auto px-4 py-6 pb-20">
         <Routes>
           <Route path="/"                   element={<Dashboard />} />
           <Route path="/level/:levelId"      element={<LevelView />} />
@@ -90,10 +97,10 @@ function AuthenticatedApp() {
           {/* <Route path="/planner" element={<PlannerView />} /> */}  {/* hidden until next release */}
           <Route path="/stats"              element={<StatsView />} />
           <Route path="/interview-prep"     element={<InterviewListView />} />
-          {/* Legal pages also accessible when logged in */}
-          <Route path="/privacy"            element={<PrivacyPolicy />} />
-          <Route path="/terms"              element={<TermsOfService />} />
-          <Route path="/contact"            element={<ContactPage />} />
+          {/* Legal pages also accessible when logged in — embedded in app layout */}
+          <Route path="/privacy"            element={<PrivacyPolicy embedded />} />
+          <Route path="/terms"              element={<TermsOfService embedded />} />
+          <Route path="/contact"            element={<ContactPage embedded />} />
           <Route path="*"                   element={<Navigate to="/" replace />} />
         </Routes>
       </main>
@@ -152,16 +159,18 @@ function AuthGate() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Analytics />
-      <AuthGate />
-      <CookieConsent />
-      <Toaster
-        position="bottom-right"
-        richColors
-        theme="system"
-        toastOptions={{ duration: 3000 }}
-      />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Analytics />
+        <AuthGate />
+        <CookieConsent />
+        <Toaster
+          position="bottom-right"
+          richColors
+          theme="system"
+          toastOptions={{ duration: 3000 }}
+        />
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }

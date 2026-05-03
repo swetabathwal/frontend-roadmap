@@ -1,27 +1,25 @@
 import { useState, useEffect } from 'react'
+import { toast } from 'sonner'
 import { Icon } from './Icon'
 import { getQuizQuestions, hasQuizQuestions } from '../data/quizQuestions'
 
 const PASS_THRESHOLD = 0.8 // 80%
 
-/**
- * Quiz modal shown when a user tries to mark a topic as complete.
- * User must score ≥80% to actually mark it complete.
- *
- * Props:
- *   topicTitle  - string
- *   topicSlug   - string
- *   attempt     - number (0-indexed, passed from parent, increments on retry)
- *   onPass      - () => void   called when quiz is passed
- *   onClose     - () => void   called on cancel or after failure close
- */
 export function QuizModal({ topicTitle, topicSlug, attempt, onPass, onClose }) {
   const [questions, setQuestions] = useState([])
-  const [answers, setAnswers]     = useState({}) // { [qIndex]: optionIndex }
+  const [answers, setAnswers]     = useState({})
   const [current, setCurrent]     = useState(0)
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore]         = useState(0)
   const [noQuestions, setNoQuestions] = useState(false)
+
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.key === 'Escape' && !submitted) onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [submitted, onClose])
 
   useEffect(() => {
     if (!hasQuizQuestions(topicSlug)) {
@@ -36,14 +34,13 @@ export function QuizModal({ topicTitle, topicSlug, attempt, onPass, onClose }) {
     setScore(0)
   }, [topicSlug, attempt])
 
-  // If no questions available, ask user to self-certify
   if (noQuestions) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="absolute inset-0 bg-black/50" onClick={onClose} />
         <div className="relative w-full max-w-md card p-6 shadow-2xl">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900,40 flex items-center justify-center flex-shrink-0">
               <Icon name="brain" size={20} className="text-amber-500" />
             </div>
             <div>
@@ -85,18 +82,20 @@ export function QuizModal({ topicTitle, topicSlug, attempt, onPass, onClose }) {
   }
 
   function handleSubmit() {
-    if (answered < totalQ) return
+    if (answered < totalQ) {
+      toast.warning(`Please answer all ${totalQ} questions before submitting. (${totalQ - answered} remaining)`)
+      return
+    }
     let correct = 0
     questions.forEach((q, i) => {
       if (answers[i] === q.correct) correct++
     })
     setScore(correct)
     setSubmitted(true)
-    setCurrent(0) // show from first question in review
+    setCurrent(0)
   }
 
   function handleRetry() {
-    // parent increments attempt so different questions are shown
     onClose('retry')
   }
 
@@ -106,7 +105,7 @@ export function QuizModal({ topicTitle, topicSlug, attempt, onPass, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50" onClick={submitted ? undefined : onClose} />
-      <div className="relative w-full max-w-2xl card shadow-2xl flex flex-col max-h-[90vh]">
+      <div role="dialog" aria-modal="true" aria-labelledby="quiz-modal-title" className="relative w-full max-w-2xl card shadow-2xl flex flex-col max-h-[90vh]">
 
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
@@ -115,7 +114,7 @@ export function QuizModal({ topicTitle, topicSlug, attempt, onPass, onClose }) {
               <Icon name="brain" size={18} className="text-indigo-500" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+              <h2 id="quiz-modal-title" className="text-sm font-bold text-slate-800 dark:text-slate-100">
                 Knowledge Check
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-xs">
@@ -126,6 +125,7 @@ export function QuizModal({ topicTitle, topicSlug, attempt, onPass, onClose }) {
           {!submitted && (
             <button
               onClick={onClose}
+              aria-label="Close quiz"
               className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700"
             >
               <Icon name="x" size={16} />
@@ -137,7 +137,7 @@ export function QuizModal({ topicTitle, topicSlug, attempt, onPass, onClose }) {
         {!submitted && (
           <div className="mx-4 mt-3 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg flex-shrink-0">
             <p className="text-xs text-amber-700 dark:text-amber-400">
-              <strong>Honesty matters:</strong> Don't copy-paste answers. This quiz helps you confirm real understanding, not just browser search skills. Answer from memory — it's for your own growth.
+              <strong>Honesty matters:</strong> Don't copy-paste answers. This quiz helps you confirm real understanding, not just browser search skills. Answer from memory — it’s for your own growth.
             </p>
           </div>
         )}
